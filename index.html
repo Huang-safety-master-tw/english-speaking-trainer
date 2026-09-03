@@ -99,6 +99,6 @@ signoutBtn.onclick=async()=>{await sb.auth.signOut();currentUser=null;guestMode=
 const originalEnableQuestionDragging=enableQuestionDragging;enableQuestionDragging=function(){if(guestMode)return;originalEnableQuestionDragging()};document.addEventListener('dragstart',e=>{if(guestMode&&e.target.closest?.('.card'))e.preventDefault()},true);
 function hideWeeklyLearningBrief(){const button=document.querySelector('#briefButton');if(button)button.style.display='none'}
 function applyVocabularyFixes(){renameVocabularySourceLabel();protectVocabularyTextSelection();renameVocabularyCollocations();addScriptSpeechDemo();refreshScriptNoteDots();enhanceVocabularyStars();positionVocabularyStarsBesideTerm();addChineseMeaningToggle();labelVocabularyTagInputs();enhanceVocabularyTagFilters();enhanceQuestionStars();lockGuestUI();syncGuestHeader();hideWeeklyLearningBrief()}
-new MutationObserver(applyVocabularyFixes).observe(document.body,{childList:true,subtree:true});applyVocabularyFixes();
+let featureObserver;const observeFeatures=()=>featureObserver.observe(document.body,{childList:true,subtree:true});featureObserver=new MutationObserver(()=>{featureObserver.disconnect();try{applyVocabularyFixes()}catch(e){console.error('Feature enhancement error',e)}finally{observeFeatures()}});observeFeatures();applyVocabularyFixes();
 setTimeout(()=>{if(!currentUser&&!ownerLoginRequested&&!guestMode)startGuestMode()},0);
 </script></body></html>
